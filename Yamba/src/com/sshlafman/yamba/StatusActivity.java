@@ -1,17 +1,27 @@
 package com.sshlafman.yamba;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 
 public class StatusActivity extends ActionBarActivity {
-
+	static final String TAG = "StatusActivity";
+	EditText editStatus;
+	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.status);
+        
+        Log.d(TAG, "onCreate with Bundle: " + bundle);
+        
+        editStatus = (EditText)findViewById(R.id.edit_status);
+        
     }
 
 
@@ -33,4 +43,10 @@ public class StatusActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+	public void onClick(View v) {
+		String statusText = editStatus.getText().toString();
+		Log.d(TAG, "onClicked with text: " + statusText);
+	}
 }
