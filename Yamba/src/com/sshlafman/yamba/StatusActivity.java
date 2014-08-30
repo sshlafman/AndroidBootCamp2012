@@ -1,5 +1,8 @@
 package com.sshlafman.yamba;
 
+import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.TwitterException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -7,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class StatusActivity extends ActionBarActivity {
@@ -46,7 +50,38 @@ public class StatusActivity extends ActionBarActivity {
 
 
 	public void onClick(View v) {
-		String statusText = editStatus.getText().toString();
+		final String statusText = editStatus.getText().toString();
+		
+		new PostToTwitter().execute(statusText);
+		
 		Log.d(TAG, "onClicked with text: " + statusText);
+	}
+	
+	class PostToTwitter extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				Twitter twitter = new Twitter("student", "password");
+				twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+				twitter.setStatus(params[0]);
+				Log.d(TAG, "Successfully posted: " + params[0]);
+				return "Successfully posted: " + params[0];
+			} catch (TwitterException e) {
+				Log.e(TAG, "Died", e);
+				e.printStackTrace();
+				return  "Failed posting: " + params[0]; 
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			Toast.makeText(StatusActivity.this, 
+					result, 
+					Toast.LENGTH_LONG).show();
+		}
+		
 	}
 }
