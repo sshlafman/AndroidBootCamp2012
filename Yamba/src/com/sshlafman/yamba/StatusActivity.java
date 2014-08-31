@@ -4,6 +4,7 @@ import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -20,12 +21,14 @@ public class StatusActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.status);
+        
+//        Debug.startMethodTracing("Yamba.trace");
         
         Log.d(TAG, "onCreate with Bundle: " + bundle);
         
-        editStatus = (EditText)findViewById(R.id.edit_status);
+        setContentView(R.layout.status);
         
+        editStatus = (EditText)findViewById(R.id.edit_status);
     }
 
 
@@ -47,6 +50,14 @@ public class StatusActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+//		Debug.stopMethodTracing();
+	}
 
 
 	public void onClick(View v) {
