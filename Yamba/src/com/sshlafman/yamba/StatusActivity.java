@@ -2,10 +2,10 @@ package com.sshlafman.yamba;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Debug;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class StatusActivity extends ActionBarActivity {
+public class StatusActivity extends Activity {
 	static final String TAG = "StatusActivity";
 	EditText editStatus;
 	
@@ -31,25 +31,6 @@ public class StatusActivity extends ActionBarActivity {
         editStatus = (EditText)findViewById(R.id.edit_status);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.status, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 
 	@Override
@@ -95,4 +76,30 @@ public class StatusActivity extends ActionBarActivity {
 		}
 		
 	}
+	
+	// Menu Stuff
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = new Intent(this, UpdaterService.class);
+		
+		switch(item.getItemId()) {
+			case R.id.item_start_service:
+				startService(intent);
+				return true;
+				
+			case R.id.item_stop_service:
+				stopService(intent);
+				return true;
+				
+			default:
+				return false;
+		}
+	}
+	
 }
