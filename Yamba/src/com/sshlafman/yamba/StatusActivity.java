@@ -86,17 +86,21 @@ public class StatusActivity extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent = new Intent(this, UpdaterService.class);
+		Intent intentUpdater = new Intent(this, UpdaterService.class);
+		Intent intentRefresh = new Intent(this, RefreshService.class);
 		
 		switch(item.getItemId()) {
 			case R.id.item_start_service:
-				startService(intent);
+				startService(intentUpdater);
 				return true;
-				
+
 			case R.id.item_stop_service:
-				stopService(intent);
+				stopService(intentUpdater);
 				return true;
-				
+
+			case R.id.item_refresh:
+				startService(intentRefresh);
+				return true;
 			default:
 				return false;
 		}

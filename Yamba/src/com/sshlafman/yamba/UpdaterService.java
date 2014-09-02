@@ -12,7 +12,9 @@ import android.util.Log;
 
 public class UpdaterService extends Service {
 	static final String TAG = "Updater Service";
+	static final int DELAY = 30; // in seconds
 	Twitter twitter;
+	boolean running = false;
 
 	@Override
 	public void onCreate() {
@@ -25,17 +27,23 @@ public class UpdaterService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		running = true;
 		new Thread() {
 			public void run() {
 				try {
-					List<Status> timeline = twitter.getPublicTimeline();
+					while(running) {
+						List<Status> timeline = twitter.getPublicTimeline();
 
-					for (Status status : timeline) {
-						Log.d(TAG, String.format("%s: %s", status.user.name,
-								status.text));
+						for (Status status : timeline) {
+							Log.d(TAG, String.format("%s: %s", status.user.name,
+									status.text));
+						}
+						Thread.sleep(DELAY * 1000);
 					}
 				} catch (TwitterException e) {
-					e.printStackTrace();
+					Log.e(TAG, "Failed because of network error");
+				} catch (InterruptedException e) {
+					Log.d(TAG, "Updater interrupted", e);
 				}
 			}
 		}.start();
@@ -47,6 +55,7 @@ public class UpdaterService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		running = false;
 		Log.d(TAG, "onDestroyed");
 	}
 

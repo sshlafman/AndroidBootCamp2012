@@ -23,7 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <service android:name=".UpdaterService"></service>
+        <service android:name=".RefreshService"></service>
+        
     </application>
 
 </manifest>
