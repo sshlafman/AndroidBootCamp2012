@@ -101,6 +101,7 @@ public class StatusActivity extends Activity {
 			case R.id.item_refresh:
 				startService(intentRefresh);
 				return true;
+				
 			default:
 				return false;
 		}
