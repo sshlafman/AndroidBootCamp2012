@@ -102,6 +102,9 @@ public class StatusActivity extends Activity {
 				startService(intentRefresh);
 				return true;
 				
+			case R.id.item_prefs:
+				startActivity(new Intent(this, PrefsActivity.class));
+				
 			default:
 				return false;
 		}
