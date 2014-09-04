@@ -2,22 +2,45 @@ package com.sshlafman.yamba;
 
 import winterwell.jtwitter.Twitter;
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class YambaApp extends Application {
+public class YambaApp extends Application implements OnSharedPreferenceChangeListener {
 	static final String TAG = "YambaApp";
 	private Twitter twitter;
+	SharedPreferences prefs;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		twitter = new Twitter("student", "password");
-		twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
+		
 		Log.d(TAG, "onCreated");
 	}
 
 	public Twitter getTwitter() {
+		if (twitter == null) {
+			// Prefs Stuff
+			String username = prefs.getString("username", "");
+			String password = prefs.getString("password", "");
+			String server = prefs.getString("server", "");
+
+			// Twitter stuff
+			twitter = new Twitter(username, password);
+			twitter.setAPIRootUrl(server);
+		}
 		return twitter;
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, 
+			String key) {
+		twitter = null;
+		Log.d(TAG, "onSharedPreferenceChanged for key: " + key);
 	}
 
 }

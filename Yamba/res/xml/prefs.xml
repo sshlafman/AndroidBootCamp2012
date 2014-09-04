@@ -8,13 +8,18 @@
     
     <EditTextPreference
         android:key="password"
-        android:summary="@string/password_summary"
-        android:title="@string/password" 
         android:password="true"
-        />
+        android:summary="@string/password_summary"
+        android:title="@string/password" />
     
     <EditTextPreference
         android:key="server"
         android:title="@string/server" />
+    
+    <EditTextPreference
+        android:key="delay"
+        android:summary="@string/delay_summary"
+        android:title="@string/delay" 
+        android:inputType="number" />
 
 </PreferenceScreen>

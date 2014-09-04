@@ -12,15 +12,13 @@ import android.util.Log;
 
 public class UpdaterService extends Service {
 	static final String TAG = "Updater Service";
-	static final int DELAY = 30; // in seconds
+	static final String DELAY = "30"; // in seconds
 	Twitter twitter;
 	boolean running = false;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		twitter = new Twitter("student", "password");
-		twitter.setAPIRootUrl("http://yamba.marakana.com/api");
 		
 		Log.d(TAG, "onCreated");
 	}
@@ -28,17 +26,20 @@ public class UpdaterService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		running = true;
+		final int delay = Integer
+				.parseInt(((YambaApp)getApplication()).prefs.getString("delay", DELAY));
 		new Thread() {
 			public void run() {
 				try {
 					while(running) {
-						List<Status> timeline = twitter.getPublicTimeline();
+						List<Status> timeline = 
+								((YambaApp)getApplication()).getTwitter().getPublicTimeline();
 
 						for (Status status : timeline) {
 							Log.d(TAG, String.format("%s: %s", status.user.name,
 									status.text));
 						}
-						Thread.sleep(DELAY * 1000);
+						Thread.sleep(delay * 1000);
 					}
 				} catch (TwitterException e) {
 					Log.e(TAG, "Failed because of network error");

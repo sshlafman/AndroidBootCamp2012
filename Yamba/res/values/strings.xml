@@ -16,5 +16,7 @@
     <string name="password_summary">Enter your login password</string>
     <string name="server">Enter your Server API Root</string>
     <string name="preferences">Preferences</string>
+    <string name="delay">Delay</string>
+    <string name="delay_summary">How frequently to check for delay</string>
 
 </resources>
