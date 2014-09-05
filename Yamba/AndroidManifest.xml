@@ -10,7 +10,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <permission
+        android:name="com.sshlafman.yamba.permission.REFRESH"
+        android:protectionLevel="dangerous" >
+    </permission>
 
     <application
         android:name=".YambaApp"
@@ -33,12 +38,17 @@
 
         <service android:name=".UpdaterService" >
         </service>
-        <service android:name=".RefreshService" >
+        <service
+            android:name=".RefreshService"
+            android:permission="com.sshlafman.yamba.permission.REFRESH" >
+            <intent-filter>
+                <action android:name="com.sshlafman.yamba.RefreshService" />
+            </intent-filter>
         </service>
 
         <receiver android:name=".BootReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
