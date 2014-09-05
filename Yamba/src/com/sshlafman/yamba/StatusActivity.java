@@ -54,8 +54,7 @@ public class StatusActivity extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			try {
-				Twitter twitter = new Twitter("student", "password");
-				twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+				Twitter twitter = ((YambaApp)getApplication()).getTwitter();
 				twitter.setStatus(params[0]);
 				Log.d(TAG, "Successfully posted: " + params[0]);
 				return "Successfully posted: " + params[0];
