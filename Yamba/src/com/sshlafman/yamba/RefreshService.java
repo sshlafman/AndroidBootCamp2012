@@ -2,7 +2,6 @@ package com.sshlafman.yamba;
 
 import java.util.List;
 
-import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
 import winterwell.jtwitter.TwitterException;
 import android.app.IntentService;
@@ -28,7 +27,10 @@ public class RefreshService extends IntentService {
 			List<Status> timeline = ((YambaApp)getApplication()).getTwitter()
 					              .getPublicTimeline();
 
+			StatusData statusData = ((YambaApp)getApplication()).statusData;
+
 			for (Status status : timeline) {
+				statusData.insert(status);
 				Log.d(TAG, String.format("%s: %s", status.user.name,
 						status.text));
 			}
