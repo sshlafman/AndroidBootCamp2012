@@ -5,14 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 public class StatusData {
 	static final String TAG = "StatusData";
 	public static final String DB_NAME = "timeline.db";
-	public static final int DB_VERSION = 1;
+	public static final int DB_VERSION = 2;
 	public static final String TABLE = "status";
-	public static final String C_ID = "_id";
+	public static final String C_ID = BaseColumns._ID;
 	public static final String C_CREATED_AT = "created_at";
 	public static final String C_USER = "user_name";
 	public static final String C_TEXT = "status_text";
@@ -57,8 +58,9 @@ public class StatusData {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			Log.d(TAG, "onUpgrade() from " + oldVersion + " to " + newVersion);
 			// Usually ALTER TABLE statement
-			db.execSQL("drop if exists " + TABLE);
+			db.execSQL("drop table if exists " + TABLE);
 			onCreate(db);
 		}
 
