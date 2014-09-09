@@ -1,8 +1,12 @@
 package com.sshlafman.yamba;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import winterwell.jtwitter.Twitter.Status;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -38,7 +42,15 @@ public class StatusData {
 
 		db.insertWithOnConflict(TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 	}
-
+	
+	public Cursor query() {
+		db = dbHelper.getReadableDatabase();
+		// SELECT * FROM status ORDER BY created_at DESC
+		Cursor cursor = db.query(TABLE, null, null, null, null, null, C_CREATED_AT + " DESC");
+	
+		return cursor;
+	}
+	
 	class DbHelper extends SQLiteOpenHelper {
 
 		public DbHelper() {
