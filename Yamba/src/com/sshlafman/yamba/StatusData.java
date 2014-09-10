@@ -46,8 +46,8 @@ public class StatusData {
 	public Cursor query() {
 		db = dbHelper.getReadableDatabase();
 		// SELECT * FROM status ORDER BY created_at DESC
-		Cursor cursor = db.query(TABLE, null, null, null, null, null, C_CREATED_AT + " DESC");
-	
+		Cursor cursor = db.query(TABLE, null, null, null, null, null, 
+				C_CREATED_AT + " DESC");
 		return cursor;
 	}
 	
