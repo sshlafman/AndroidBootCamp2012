@@ -74,9 +74,10 @@ public class TimelineActivity extends ListActivity {
 				
 			case R.id.item_prefs:
 				startActivity(new Intent(this, PrefsActivity.class));
+				return true;
 				
-			case R.id.item_timeline:
-				startActivity(new Intent(this, TimelineActivity.class));
+			case R.id.item_status_update:
+				startActivity(new Intent(this, StatusActivity.class));
 				return true;
 				
 			default:
