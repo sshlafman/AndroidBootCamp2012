@@ -1,37 +1,35 @@
 package com.sshlafman.yamba;
 
-import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.text.format.DateUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
-public class TimelineActivity extends Activity {
+public class TimelineActivity extends ListActivity {
 	static final String[] FROM = { StatusData.C_USER, StatusData.C_TEXT, StatusData.C_CREATED_AT };
 	static final int[] TO = {R.id.text_user, R.id.text_text, R.id.text_created_at };
-	ListView list;
 	Cursor cursor;
 	SimpleCursorAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.timeline);
-		
-		list = (ListView) findViewById(R.id.list);
-		
+				
 		cursor = ((YambaApp)getApplication()).statusData.query();
 		
 		adapter = new SimpleCursorAdapter(this, R.layout.row,
                                            cursor, FROM, TO, 0);
 		adapter.setViewBinder(VIEW_BINDER);
 		
-		list.setAdapter(adapter);
-		
+		setTitle(R.string.timeline);
+		setListAdapter(adapter);
 	}
 	
 	static final ViewBinder VIEW_BINDER = new ViewBinder() {
@@ -48,4 +46,41 @@ public class TimelineActivity extends Activity {
 			return true;
 		}
 	};
+	
+	// Menu Stuff
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intentUpdater = new Intent(this, UpdaterService.class);
+		Intent intentRefresh = new Intent(this, RefreshService.class);
+		
+		switch(item.getItemId()) {
+			case R.id.item_start_service:
+				startService(intentUpdater);
+				return true;
+
+			case R.id.item_stop_service:
+				stopService(intentUpdater);
+				return true;
+
+			case R.id.item_refresh:
+				startService(intentRefresh);
+				return true;
+				
+			case R.id.item_prefs:
+				startActivity(new Intent(this, PrefsActivity.class));
+				
+			case R.id.item_timeline:
+				startActivity(new Intent(this, TimelineActivity.class));
+				return true;
+				
+			default:
+				return false;
+		}
+	}
 }

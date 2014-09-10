@@ -76,41 +76,4 @@ public class StatusActivity extends Activity {
 		
 	}
 	
-	// Menu Stuff
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intentUpdater = new Intent(this, UpdaterService.class);
-		Intent intentRefresh = new Intent(this, RefreshService.class);
-		
-		switch(item.getItemId()) {
-			case R.id.item_start_service:
-				startService(intentUpdater);
-				return true;
-
-			case R.id.item_stop_service:
-				stopService(intentUpdater);
-				return true;
-
-			case R.id.item_refresh:
-				startService(intentRefresh);
-				return true;
-				
-			case R.id.item_prefs:
-				startActivity(new Intent(this, PrefsActivity.class));
-				
-			case R.id.item_timeline:
-				startActivity(new Intent(this, TimelineActivity.class));
-				return true;
-				
-			default:
-				return false;
-		}
-	}
-	
 }
