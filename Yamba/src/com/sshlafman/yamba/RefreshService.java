@@ -23,20 +23,7 @@ public class RefreshService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		try {
-			List<Status> timeline = ((YambaApp)getApplication()).getTwitter()
-					              .getPublicTimeline();
-
-			StatusData statusData = ((YambaApp)getApplication()).statusData;
-
-			for (Status status : timeline) {
-				statusData.insert(status);
-				Log.d(TAG, String.format("%s: %s", status.user.name,
-						status.text));
-			}
-		} catch (TwitterException e) {
-			Log.e(TAG, "Failed to access twitter sevice", e);
-		}
+		((YambaApp)getApplication()).pullAndInsert();
 		Log.d(TAG, "onHandleIntent");
 	}
 

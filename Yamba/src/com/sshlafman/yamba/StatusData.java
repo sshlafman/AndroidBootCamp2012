@@ -40,17 +40,18 @@ public class StatusData {
 		values.put(C_USER, status.user.name);
 		values.put(C_TEXT, status.text);
 
-		db.insertWithOnConflict(TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+		db.insertWithOnConflict(TABLE, null, values,
+				SQLiteDatabase.CONFLICT_IGNORE);
 	}
-	
+
 	public Cursor query() {
 		db = dbHelper.getReadableDatabase();
 		// SELECT * FROM status ORDER BY created_at DESC
-		Cursor cursor = db.query(TABLE, null, null, null, null, null, 
+		Cursor cursor = db.query(TABLE, null, null, null, null, null,
 				C_CREATED_AT + " DESC");
 		return cursor;
 	}
-	
+
 	class DbHelper extends SQLiteOpenHelper {
 
 		public DbHelper() {

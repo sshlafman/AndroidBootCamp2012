@@ -1,7 +1,13 @@
 package com.sshlafman.yamba;
 
+import java.security.acl.LastOwnerException;
+import java.util.List;
+
 import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.Twitter.Status;
+import winterwell.jtwitter.TwitterException;
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
@@ -9,6 +15,7 @@ import android.util.Log;
 
 public class YambaApp extends Application implements OnSharedPreferenceChangeListener {
 	static final String TAG = "YambaApp";
+	public static final String ACTION_NEW_STATUS = "com.sshlafman.yamba.NEW_STATUS";
 	private Twitter twitter;
 	SharedPreferences prefs;
 	StatusData statusData;
@@ -46,6 +53,35 @@ public class YambaApp extends Application implements OnSharedPreferenceChangeLis
 		twitter = null;
 		this.prefs = sharedPreferences;
 		Log.d(TAG, "onSharedPreferenceChanged for key: " + key);
+	}
+	
+	long lastTimestampSeen = -1;
+	public int pullAndInsert() {
+		int count = 0;
+		long biggestTimestampSeen = -1;
+		try {
+			List<Status> timeline = getTwitter().getPublicTimeline();
+
+			for (Status status : timeline) {
+				statusData.insert(status);
+//				if (biggestTimestampSeen==-1) biggestTimestampSeen = status.getCreatedAt().getTime();
+				if (status.createdAt.getTime() > this.lastTimestampSeen) {
+					count++;
+					biggestTimestampSeen = (status.getCreatedAt().getTime() > biggestTimestampSeen) ? 
+							                status.getCreatedAt().getTime() : biggestTimestampSeen;
+					Log.d(TAG, String.format("%s: %s", status.user.name, status.text));
+				}
+			}
+		} catch (TwitterException e) {
+			Log.e(TAG, "Failed to pull timeline");
+		}
+		
+		if (count > 0) {
+			sendBroadcast( new Intent(ACTION_NEW_STATUS).putExtra("count", count) );
+		}
+		
+		this.lastTimestampSeen = lastTimestampSeen;
+		return count;
 	}
 
 }
