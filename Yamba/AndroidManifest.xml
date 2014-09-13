@@ -14,7 +14,7 @@
 
     <permission
         android:name="com.sshlafman.yamba.permission.REFRESH"
-        android:protectionLevel="dangerous" >
+        android:protectionLevel="signature" >
     </permission>
 
     <application
@@ -53,6 +53,7 @@
 
         <receiver android:name=".BootReceiver" >
             <intent-filter>
+                <action android:name="com.sshlafman.yamba.TEST_BROADCAST" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>

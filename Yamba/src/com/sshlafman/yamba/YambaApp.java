@@ -1,6 +1,5 @@
 package com.sshlafman.yamba;
 
-import java.security.acl.LastOwnerException;
 import java.util.List;
 
 import winterwell.jtwitter.Twitter;
@@ -16,6 +15,7 @@ import android.util.Log;
 public class YambaApp extends Application implements OnSharedPreferenceChangeListener {
 	static final String TAG = "YambaApp";
 	public static final String ACTION_NEW_STATUS = "com.sshlafman.yamba.NEW_STATUS";
+	public static final String ACTION_REFRESH = "com.sshlafman.yamba.RefreshService";
 	private Twitter twitter;
 	SharedPreferences prefs;
 	StatusData statusData;

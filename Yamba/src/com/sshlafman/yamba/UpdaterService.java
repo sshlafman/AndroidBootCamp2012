@@ -1,10 +1,6 @@
 package com.sshlafman.yamba;
 
-import java.util.List;
-
 import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.Twitter.Status;
-import winterwell.jtwitter.TwitterException;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;

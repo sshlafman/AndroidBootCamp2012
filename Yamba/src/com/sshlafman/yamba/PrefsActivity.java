@@ -1,6 +1,5 @@
 package com.sshlafman.yamba;
 
-import android.R.anim;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
