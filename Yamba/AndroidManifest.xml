@@ -51,9 +51,10 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".BootReceiver" >
+        <receiver android:name=".RefreshScheduleReceiver" >
             <intent-filter>
                 <action android:name="com.sshlafman.yamba.TEST_BROADCAST" />
+                <action android:name="com.sshlafman.yamba.RefreshAlarm"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>

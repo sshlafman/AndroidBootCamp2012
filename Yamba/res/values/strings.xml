@@ -20,18 +20,22 @@
     <string name="delay_summary">How frequently to check for delay</string>
 
     <string-array name="delayNames">
+        <item>Test 30 seconds</item>
         <item>Every fifteen minute</item>
         <item>Every half hour</item>
         <item>Every hour</item>
         <item>Every half day</item>
         <item>Once a day</item>
+        <item>Never</item>
     </string-array>
     <string-array name="delayValues">
+        <item>30000</item>
         <item>900000</item>
         <item>1800000</item>
         <item>3600000</item>
         <item>43200000</item>
         <item>86400000</item>
+        <item>0</item>
         </string-array>
 
     <string name="timeline">Timeline</string>

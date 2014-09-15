@@ -16,6 +16,8 @@ public class YambaApp extends Application implements OnSharedPreferenceChangeLis
 	static final String TAG = "YambaApp";
 	public static final String ACTION_NEW_STATUS = "com.sshlafman.yamba.NEW_STATUS";
 	public static final String ACTION_REFRESH = "com.sshlafman.yamba.RefreshService";
+	public static final String ACTION_REFRESH_ALARM = "com.sshlafman.yamba.RefreshAlarm";
+
 	private Twitter twitter;
 	SharedPreferences prefs;
 	StatusData statusData;
@@ -46,12 +48,15 @@ public class YambaApp extends Application implements OnSharedPreferenceChangeLis
 		}
 		return twitter;
 	}
+	
+	static final Intent refreshAlarm = new Intent (ACTION_REFRESH_ALARM);
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, 
 			String key) {
 		twitter = null;
 		this.prefs = sharedPreferences;
+		sendBroadcast(refreshAlarm);
 		Log.d(TAG, "onSharedPreferenceChanged for key: " + key);
 	}
 	
