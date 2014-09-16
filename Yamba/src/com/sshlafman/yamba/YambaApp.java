@@ -38,9 +38,9 @@ public class YambaApp extends Application implements OnSharedPreferenceChangeLis
 		if (twitter == null) {
 			// Prefs Stuff
 			prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String username = prefs.getString("username", "");
-			String password = prefs.getString("password", "");
-			String server = prefs.getString("server", "");
+			String username = prefs.getString("username", "student");
+			String password = prefs.getString("password", "password");
+			String server = prefs.getString("server", "http://yamba.marakana.com/api");
 
 			// Twitter stuff
 			twitter = new Twitter(username, password);
