@@ -25,11 +25,10 @@ public class StatusData {
 
 	public StatusData(Context context) {
 		this.context = context;
-		dbHelper = new DbHelper();
+		dbHelper = new DbHelper(context);
 	}
 
 	public void insert(Status status) {
-		db = dbHelper.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(C_ID, status.id);
@@ -37,8 +36,7 @@ public class StatusData {
 		values.put(C_USER, status.user.name);
 		values.put(C_TEXT, status.text);
 
-		db.insertWithOnConflict(TABLE, null, values,
-				SQLiteDatabase.CONFLICT_IGNORE);
+		context.getContentResolver().insert(StatusProvider.CONTENT_URI, values);
 	}
 
 	public Cursor query() {
@@ -48,31 +46,33 @@ public class StatusData {
 				C_CREATED_AT + " DESC");
 		return cursor;
 	}
+}
 
-	class DbHelper extends SQLiteOpenHelper {
+class DbHelper extends SQLiteOpenHelper {
+	static final String TAG = "DbHelper";
 
-		public DbHelper() {
-			super(context, DB_NAME, null, DB_VERSION);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			String sql = String.format("create table %s "
-					+ "(%s int primary key, %s int, %s text, %s text)", TABLE,
-					C_ID, C_CREATED_AT, C_USER, C_TEXT);
-
-			Log.d(TAG, "onCreate with SQL: " + sql);
-
-			db.execSQL(sql);
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.d(TAG, "onUpgrade() from " + oldVersion + " to " + newVersion);
-			// Usually ALTER TABLE statement
-			db.execSQL("drop table if exists " + TABLE);
-			onCreate(db);
-		}
-
+	public DbHelper(Context context) {
+		super(context, StatusData.DB_NAME, null, StatusData.DB_VERSION);
 	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		String sql = String.format("create table %s "
+				+ "(%s int primary key, %s int, %s text, %s text)", 
+				StatusData.TABLE,
+				StatusData.C_ID, StatusData.C_CREATED_AT, StatusData.C_USER, StatusData.C_TEXT);
+
+		Log.d(TAG, "onCreate with SQL: " + sql);
+
+		db.execSQL(sql);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		Log.d(TAG, "onUpgrade() from " + oldVersion + " to " + newVersion);
+		// Usually ALTER TABLE statement
+		db.execSQL("drop table if exists " + StatusData.TABLE);
+		onCreate(db);
+	}
+
 }
