@@ -18,33 +18,36 @@ import android.widget.TextView;
 
 public class TimelineActivity extends ListActivity {
 	static final String TAG = "TimelineActivity";
-	
-	static final String[] FROM = { StatusData.C_USER, StatusData.C_TEXT, StatusData.C_CREATED_AT };
-	static final int[] TO = {R.id.text_user, R.id.text_text, R.id.text_created_at };
+
+	static final String[] FROM = { StatusProvider.C_USER, StatusProvider.C_TEXT,
+			StatusProvider.C_CREATED_AT };
+	static final int[] TO = { R.id.text_user, R.id.text_text,
+			R.id.text_created_at };
 	Cursor cursor;
 	SimpleCursorAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-				
-		cursor = ((YambaApp)getApplication()).statusData.query();
-		
-		adapter = new SimpleCursorAdapter(this, R.layout.row,
-                                           cursor, FROM, TO, 0);
+
+		cursor = getContentResolver().query(StatusProvider.CONTENT_URI,
+				null, null, null, StatusProvider.C_CREATED_AT + " DESC");
+		adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO,
+				0);
 		adapter.setViewBinder(VIEW_BINDER);
-		
+
 		setTitle(R.string.timeline);
 		setListAdapter(adapter);
 	}
-	
+
 	TimelineReceiver receiver;
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		if (receiver == null) receiver = new TimelineReceiver();
+
+		if (receiver == null)
+			receiver = new TimelineReceiver();
 		registerReceiver(receiver, new IntentFilter(YambaApp.ACTION_NEW_STATUS));
 	}
 
@@ -54,70 +57,73 @@ public class TimelineActivity extends ListActivity {
 		unregisterReceiver(receiver);
 	}
 
-
-
 	static final ViewBinder VIEW_BINDER = new ViewBinder() {
-		
+
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			if( view.getId() != R.id.text_created_at ) return false;
-			
-			long time = cursor.getLong( cursor.getColumnIndex(StatusData.C_CREATED_AT));
-			CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(time);
-			
-			((TextView)view).setText(relativeTime);
-			
+			if (view.getId() != R.id.text_created_at)
+				return false;
+
+			long time = cursor.getLong(cursor
+					.getColumnIndex(StatusProvider.C_CREATED_AT));
+			CharSequence relativeTime = DateUtils
+					.getRelativeTimeSpanString(time);
+
+			((TextView) view).setText(relativeTime);
+
 			return true;
 		}
 	};
-	
+
 	// Menu Stuff
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intentUpdater = new Intent(this, UpdaterService.class);
 		Intent intentRefresh = new Intent(this, RefreshService.class);
-		
-		switch(item.getItemId()) {
-			case R.id.item_start_service:
-				startService(intentUpdater);
-				return true;
 
-			case R.id.item_stop_service:
-				stopService(intentUpdater);
-				return true;
+		switch (item.getItemId()) {
+		case R.id.item_start_service:
+			startService(intentUpdater);
+			return true;
 
-			case R.id.item_refresh:
-				startService(intentRefresh);
-				return true;
-				
-			case R.id.item_prefs:
-				startActivity(new Intent(this, PrefsActivity.class));
-				return true;
-				
-			case R.id.item_status_update:
-				startActivity(new Intent(this, StatusActivity.class));
-				return true;
-				
-			default:
-				return false;
+		case R.id.item_stop_service:
+			stopService(intentUpdater);
+			return true;
+
+		case R.id.item_refresh:
+			startService(intentRefresh);
+			return true;
+
+		case R.id.item_prefs:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+
+		case R.id.item_status_update:
+			startActivity(new Intent(this, StatusActivity.class));
+			return true;
+
+		default:
+			return false;
 		}
 	}
-	
+
 	class TimelineReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			cursor = ((YambaApp)getApplication()).statusData.query();
+			cursor = getContentResolver().query(StatusProvider.CONTENT_URI,
+					null, null, null, StatusProvider.C_CREATED_AT + " DESC");
 			adapter.changeCursor(cursor);
-			Log.d(TAG, "onReceive changeCursor with count: " + 
-			      intent.getIntExtra("count", 0));
+			Log.d(TAG,
+					"onReceive changeCursor with count: "
+							+ intent.getIntExtra("count", 0));
 		}
-		
+
 	}
 }
